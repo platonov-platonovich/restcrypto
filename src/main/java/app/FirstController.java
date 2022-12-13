@@ -15,9 +15,10 @@ public class FirstController {
         this.postgresCryptoDao = postgresCryptoDao;
     }
 
-    @RequestMapping("/")
+    @RequestMapping("/cryptocurrencies")
     public List<Cryptocurrency> getAll() {
         return postgresCryptoDao.getAll();
     }
 }
+
 
