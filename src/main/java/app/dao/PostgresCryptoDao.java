@@ -2,6 +2,7 @@ package app.dao;
 
 import app.models.Cryptocurrency;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.client.RestTemplate;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -43,5 +44,12 @@ public class PostgresCryptoDao implements CryptoDao {
         }
         return cryptocurrencies;
     }
-
+    public Cryptocurrency getRestTemplate() {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "https://api.coinlore.net/api/ticker/?id=90";
+        Cryptocurrency response = restTemplate.getForObject(url, Cryptocurrency.class);
+        return new Cryptocurrency();
+    }
 }
+
+

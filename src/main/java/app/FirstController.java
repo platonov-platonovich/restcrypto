@@ -22,14 +22,15 @@ public class FirstController {
     public List<Cryptocurrency> getAll() {
         return postgresCryptoDao.getAll();
     }
-    @RequestMapping("/n")
-    public Cryptocurrency getC() {
-                RestTemplate restTemplate = new RestTemplate();
-        Cryptocurrency cryptocurrency = restTemplate.getForObject("https://api.coinlore.net/api/ticker/?id=90", Cryptocurrency.class);
-        System.out.println("Symbol:    " + cryptocurrency.getSymbol());
-        System.out.println("Price:   " + cryptocurrency.getPrice());
-        return cryptocurrency;
+@RequestMapping("/g")
+public Cryptocurrency getRestTemplate() {
+     return  postgresCryptoDao.getRestTemplate();
+//    RestTemplate restTemplate = new RestTemplate();
+//    String url = "https://api.coinlore.net/api/ticker/?id=90";
+//    Cryptocurrency response = restTemplate.getForObject(url, Cryptocurrency.class);
+//    return response;
 }
 }
+
 
 

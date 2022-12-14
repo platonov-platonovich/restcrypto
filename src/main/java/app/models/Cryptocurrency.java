@@ -5,15 +5,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Cryptocurrency {
     private int id;
-    private int price;
+    private int price_usd;
     private String symbol;
 
-    public void setPrice(int price) {
-        this.price = price;
+    public void setPrice_usd(int price_usd) {
+        this.price_usd = price_usd;
     }
 
-    public int getPrice() {
-        return price;
+    public int getPrice_usd() {
+        return price_usd;
     }
 
     public Cryptocurrency() {
@@ -32,9 +32,9 @@ public class Cryptocurrency {
         this.symbol = symbol;
     }
 
-    public Cryptocurrency(int id, int price, String symbol) {
+    public Cryptocurrency(int id, int price_usd, String symbol) {
         this.id = id;
-        this.price = price;
+        this.price_usd = price_usd;
         this.symbol = symbol;
     }
 
