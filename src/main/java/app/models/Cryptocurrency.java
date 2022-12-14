@@ -1,5 +1,8 @@
 package app.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Cryptocurrency {
     private int id;
     private int price;
