@@ -1,11 +1,14 @@
 package app.dao;
 
 import app.models.Cryptocurrency;
+import com.fasterxml.jackson.core.type.TypeReference;
+import org.json.JSONObject;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Repository
@@ -35,7 +38,7 @@ public class PostgresCryptoDao implements CryptoDao {
             ResultSet resultSet = statement.executeQuery(SQL);
             while (resultSet.next()) {
                 Cryptocurrency cryptocurrency = new Cryptocurrency();
-                cryptocurrency.setId(resultSet.getInt("id"));
+                cryptocurrency.setId(resultSet.getString("id"));
                 cryptocurrency.setSymbol(resultSet.getString("symbol"));
                 cryptocurrencies.add(cryptocurrency);
             }
@@ -44,11 +47,11 @@ public class PostgresCryptoDao implements CryptoDao {
         }
         return cryptocurrencies;
     }
-    public Cryptocurrency getRestTemplate() {
+    public List<Cryptocurrency> getRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
         String url = "https://api.coinlore.net/api/ticker/?id=90";
-        Cryptocurrency response = restTemplate.getForObject(url, Cryptocurrency.class);
-        return new Cryptocurrency();
+        Cryptocurrency[] forObject = restTemplate.getForObject(url, Cryptocurrency[].class);
+        return Arrays.asList(forObject);
     }
 }
 
