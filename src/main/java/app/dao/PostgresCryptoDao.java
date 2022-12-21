@@ -1,8 +1,7 @@
 package app.dao;
 
 import app.models.Cryptocurrency;
-import com.fasterxml.jackson.core.type.TypeReference;
-import org.json.JSONObject;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,6 +16,7 @@ public class PostgresCryptoDao implements CryptoDao {
     private static final String USERNAME = "postgres";
     private static final String PASSWORD = "qwerty";
     private static final Connection connection;
+
     static {
         try {
             Class.forName("org.postgresql.Driver");
@@ -29,6 +29,7 @@ public class PostgresCryptoDao implements CryptoDao {
             throw new RuntimeException(throwables);
         }
     }
+
     @Override
     public List<Cryptocurrency> getAll() {
         List<Cryptocurrency> cryptocurrencies = new ArrayList<>();
@@ -47,12 +48,34 @@ public class PostgresCryptoDao implements CryptoDao {
         }
         return cryptocurrencies;
     }
+
+
     public List<Cryptocurrency> getRestTemplate() {
+        List<Cryptocurrency> cryptocurrencies1 = new ArrayList<>();
         RestTemplate restTemplate = new RestTemplate();
-        String url = "https://api.coinlore.net/api/ticker/?id=90";
-        Cryptocurrency[] forObject = restTemplate.getForObject(url, Cryptocurrency[].class);
-        return Arrays.asList(forObject);
+        String[] cryptocurrenciesId = {"90", "80", "48543"};
+        for (String i:cryptocurrenciesId) {
+            String url = "https://api.coinlore.net/api/ticker/?id=%s";
+            url = String.format(url, i);
+            Cryptocurrency myCryptocurrency = null;
+            Cryptocurrency[] forObject = restTemplate.getForObject(url, Cryptocurrency[].class);
+            List<Cryptocurrency> cryptocurrencies = Arrays.asList(forObject);
+            for (Cryptocurrency cryptocurrency : cryptocurrencies) {
+                if (cryptocurrency.getId().equals(i)) {
+                     cryptocurrencies1.add(cryptocurrency);
+                }
+            }
+        }
+        return cryptocurrencies1;
     }
+
 }
+//    @Override
+//    public void update() {
+//        try {
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//}
 
 
