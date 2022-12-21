@@ -41,6 +41,7 @@ public class PostgresCryptoDao implements CryptoDao {
                 Cryptocurrency cryptocurrency = new Cryptocurrency();
                 cryptocurrency.setId(resultSet.getString("id"));
                 cryptocurrency.setSymbol(resultSet.getString("symbol"));
+                cryptocurrency.setPrice_usd(resultSet.getString("price_usd"));
                 cryptocurrencies.add(cryptocurrency);
             }
         } catch (SQLException e) {
@@ -50,11 +51,12 @@ public class PostgresCryptoDao implements CryptoDao {
     }
 
 
-    public List<Cryptocurrency> getRestTemplate() {
+
+    public void update() {
         List<Cryptocurrency> cryptocurrencies1 = new ArrayList<>();
         RestTemplate restTemplate = new RestTemplate();
         String[] cryptocurrenciesId = {"90", "80", "48543"};
-        for (String i:cryptocurrenciesId) {
+        for (String i : cryptocurrenciesId) {
             String url = "https://api.coinlore.net/api/ticker/?id=%s";
             url = String.format(url, i);
             Cryptocurrency myCryptocurrency = null;
@@ -62,20 +64,17 @@ public class PostgresCryptoDao implements CryptoDao {
             List<Cryptocurrency> cryptocurrencies = Arrays.asList(forObject);
             for (Cryptocurrency cryptocurrency : cryptocurrencies) {
                 if (cryptocurrency.getId().equals(i)) {
-                     cryptocurrencies1.add(cryptocurrency);
+                    try {
+                        PreparedStatement preparedStatement =
+                                connection.prepareStatement("UPDATE cryptocurrency SET price_usd=? WHERE id=?");
+                        preparedStatement.setString(1, cryptocurrency.getPrice_usd());
+                        preparedStatement.setString(2, i);
+                        preparedStatement.executeUpdate();
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         }
-        return cryptocurrencies1;
     }
-
 }
-//    @Override
-//    public void update() {
-//        try {
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//}
-
-

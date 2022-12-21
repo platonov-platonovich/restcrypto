@@ -26,7 +26,7 @@ public class FirstController {
     }
 @RequestMapping("/get")
 public List<Cryptocurrency> getRestTemplate() {
-     return  postgresCryptoDao.getRestTemplate();
+     return  null;
 }
 }
 

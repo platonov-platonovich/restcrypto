@@ -5,7 +5,7 @@ import app.models.Cryptocurrency;
 import java.util.List;
 public interface CryptoDao {
     List<Cryptocurrency> getAll();
-        List<Cryptocurrency> getRestTemplate();
 
-//    void update();
+
+    void update();
 }

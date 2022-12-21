@@ -1,27 +1,35 @@
 package app.service;
 
+import app.dao.PostgresCryptoDao;
 import app.models.Cryptocurrency;
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
-
+@Component
 public class Poller {
+
 
     @Async
     @Scheduled(fixedRate = 15000)
-    public Cryptocurrency scheduleFixedRateTaskAsync(Cryptocurrency oldValue, Cryptocurrency newValue) {
+    public void times(){
+        PostgresCryptoDao cryptoDao = new PostgresCryptoDao();
+        cryptoDao.update();
+        System.out.println("hay hay");
 
-        if (newValue.equals(oldValue)) {
-            System.out.println("hay hay");
-            return oldValue;
-        } else {
-            System.out.println("hay hay");
-            return newValue;
-
-        }
+//    public Cryptocurrency scheduleFixedRateTaskAsync(Cryptocurrency oldValue, Cryptocurrency newValue) {
+//
+//        if (newValue.equals(oldValue)) {
+//            System.out.println("hay hay");
+//            return oldValue;
+//        } else {
+//            System.out.println("hay hay");
+//            return newValue;
+//
+//        }
     }
 }
