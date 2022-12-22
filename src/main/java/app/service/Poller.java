@@ -1,15 +1,12 @@
 package app.service;
 
 import app.dao.PostgresCryptoDao;
-import app.models.Cryptocurrency;
-import jakarta.annotation.PostConstruct;
-import org.springframework.context.annotation.Configuration;
+
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
+
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 @Component
 public class Poller {
 
