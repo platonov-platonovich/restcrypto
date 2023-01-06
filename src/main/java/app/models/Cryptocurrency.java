@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 
 //@JsonIgnoreProperties(ignoreUnknown = true)
+
 public class Cryptocurrency {
     private String id;
     private String price_usd;

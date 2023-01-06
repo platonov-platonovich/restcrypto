@@ -1,10 +1,9 @@
 package app;
-
 import app.dao.PostgresCryptoDao;
 import app.models.Cryptocurrency;
 
 
-import org.springframework.web.bind.annotation.PathVariable;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +21,7 @@ public class FirstController {
 
     @RequestMapping("/cryptocurrencies")
     public List<Cryptocurrency> getAll() {
+        System.out.println("as");
         return postgresCryptoDao.getAll();
     }
 @RequestMapping("/get")
