@@ -1,17 +1,36 @@
-//package app.dao;
-//
-//import app.models.Cryptocurrency;
-//import org.springframework.stereotype.Component;
-//import org.springframework.web.client.RestTemplate;
-//
-//import java.util.ArrayList;
-//import java.util.Arrays;
-//import java.util.List;
-//
-//@Component
-//
-//public class PostgresCryptoDao {
-//
+package app.repositories;
+
+import app.models.Cryptocurrency;
+
+import org.springframework.data.repository.CrudRepository;
+
+import java.util.List;
+
+
+public interface CryptoRepository extends CrudRepository<Cryptocurrency, String> {
+
+ @Override
+List<Cryptocurrency> findAll();
+}
+//    @Override
+//    public List<Cryptocurrency> getAll() {
+//        List<Cryptocurrency> cryptocurrencies = new ArrayList<>();
+//        try {
+//            Statement statement = connection.createStatement();
+//            String SQL = "SELECT * FROM cryptocurrency";
+//            ResultSet resultSet = statement.executeQuery(SQL);
+//            while (resultSet.next()) {
+//                Cryptocurrency cryptocurrency = new Cryptocurrency();
+//                cryptocurrency.setId(resultSet.getString("id"));
+//                cryptocurrency.setSymbol(resultSet.getString("symbol"));
+//                cryptocurrency.setPrice_usd(resultSet.getString("price_usd"));
+//                cryptocurrencies.add(cryptocurrency);
+//            }
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return cryptocurrencies;
+//    }
 //
 //
 //    public List<Cryptocurrency> getActualCryptocurrencies() {
@@ -33,7 +52,6 @@
 //    }
 //
 //    public boolean comparison() {
-//
 //        boolean equal = true;
 //        List<Cryptocurrency> cryptocurrenciesBD = getActualCryptocurrencies();
 //        List<Cryptocurrency> cryptocurrenciesServer = getActualCryptocurrencies();
@@ -63,7 +81,15 @@
 //                List<Cryptocurrency> cryptocurrencies = Arrays.asList(forObject);
 //                for (Cryptocurrency cryptocurrency : cryptocurrencies) {
 //                    if (cryptocurrency.getId().equals(id)) {
-////                       repository.save(cryptocurrency);
+//                        try {
+//                            PreparedStatement preparedStatement =
+//                                    connection.prepareStatement("UPDATE cryptocurrency SET price_usd=? WHERE id=?");
+//                            preparedStatement.setString(1, cryptocurrency.getPrice_usd());
+//                            preparedStatement.setString(2, id);
+//                            preparedStatement.executeUpdate();
+//                        } catch (SQLException e) {
+//                            throw new RuntimeException(e);
+//                        }
 //                    }
 //                }
 //            }

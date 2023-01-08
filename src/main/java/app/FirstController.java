@@ -1,9 +1,10 @@
 package app;
-import app.dao.PostgresCryptoDao;
+
 import app.models.Cryptocurrency;
 
 
-
+import app.repositories.CryptoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,18 +12,15 @@ import java.util.List;
 
 @RestController
 public class FirstController {
+@Autowired
+private  CryptoRepository cryptoRepository;
 
-
-    private final PostgresCryptoDao postgresCryptoDao;
-
-    public FirstController(PostgresCryptoDao postgresCryptoDao) {
-        this.postgresCryptoDao = postgresCryptoDao;
-    }
 
     @RequestMapping("/cryptocurrencies")
     public List<Cryptocurrency> getAll() {
         System.out.println("as");
-        return postgresCryptoDao.getAll();
+       return (List<Cryptocurrency>) cryptoRepository.findAll();
+
     }
 @RequestMapping("/get")
 public List<Cryptocurrency> getRestTemplate() {

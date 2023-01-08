@@ -1,13 +1,20 @@
 package app.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.util.JSONPObject;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 //@JsonIgnoreProperties(ignoreUnknown = true)
-
+@Entity
+@Table(name = "Cryptocurrency")
 public class Cryptocurrency {
+    @Id
     private String id;
+    @Column
     private String price_usd;
+    @Column
     private String symbol;
 
     public void setPrice_usd(String price_usd) {
