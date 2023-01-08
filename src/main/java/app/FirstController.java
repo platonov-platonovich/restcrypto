@@ -5,10 +5,12 @@ import app.models.Cryptocurrency;
 
 import app.repositories.CryptoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class FirstController {
@@ -22,9 +24,9 @@ private  CryptoRepository cryptoRepository;
        return (List<Cryptocurrency>) cryptoRepository.findAll();
 
     }
-@RequestMapping("/get")
-public List<Cryptocurrency> getRestTemplate() {
-     return  null;
+@RequestMapping("/cryptocurrency/{id}")
+public Optional<Cryptocurrency> getById(@PathVariable("id") String id) {
+     return  cryptoRepository.findById(id);
 }
 }
 
