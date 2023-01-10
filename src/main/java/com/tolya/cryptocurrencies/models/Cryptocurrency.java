@@ -1,4 +1,4 @@
-package app.models;
+package com.tolya.cryptocurrencies.models;
 
 
 import jakarta.persistence.Column;
