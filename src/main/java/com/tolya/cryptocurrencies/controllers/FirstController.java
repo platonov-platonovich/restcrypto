@@ -1,11 +1,8 @@
-package com.tolya.cryptocurrencies;
+package com.tolya.cryptocurrencies.controllers;
 
 import com.tolya.cryptocurrencies.models.Cryptocurrency;
-
-
 import com.tolya.cryptocurrencies.repositories.CryptoRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,8 +17,8 @@ private  CryptoRepository cryptoRepository;
 
     @RequestMapping("/cryptocurrencies")
     public List<Cryptocurrency> getAll() {
-        System.out.println("as");
-       return (List<Cryptocurrency>) cryptoRepository.findAll();
+
+       return cryptoRepository.findAll();
 
     }
 @RequestMapping("/cryptocurrency/{id}")

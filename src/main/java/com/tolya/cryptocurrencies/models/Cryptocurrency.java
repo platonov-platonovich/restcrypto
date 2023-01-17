@@ -1,28 +1,29 @@
 package com.tolya.cryptocurrencies.models;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-//@JsonIgnoreProperties(ignoreUnknown = true)
+import javax.persistence.*;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(name = "Cryptocurrency")
 public class Cryptocurrency {
     @Id
     private String id;
     @Column
-    private String price_usd;
-    @Column
     private String symbol;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "price_usd")
 
-    public void setPrice_usd(String price_usd) {
-        this.price_usd = price_usd;
+    private Price_usd price_usd;
+
+    public Price_usd getPrice_usd() {
+        return price_usd;
     }
 
-    public String getPrice_usd() {
-        return price_usd;
+    public void setPrice_usd(Price_usd price_usd) {
+        this.price_usd = price_usd;
     }
 
     public Cryptocurrency() {
@@ -38,12 +39,6 @@ public class Cryptocurrency {
 
     public Cryptocurrency(String id, String symbol) {
         this.id = id;
-        this.symbol = symbol;
-    }
-
-    public Cryptocurrency(String id, String price_usd, String symbol) {
-        this.id = id;
-        this.price_usd = price_usd;
         this.symbol = symbol;
     }
 

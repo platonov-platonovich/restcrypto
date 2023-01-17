@@ -21,7 +21,7 @@ public class CoinloreClient {
 //        String url = "https://api.coinlore.net/api/ticker/?id=%s";
 //        url = String.format(url, id);
 //        Cryptocurrency[] forObject = restTemplate.getForObject(url, Cryptocurrency[].class);
-//        List<Cryptocurrency> cryptocurrencies = Arrays.asList(forObject);
+//        List<Cryptocurrenc  y> cryptocurrencies = Arrays.asList(forObject);
 //        Cryptocurrency cryptocurrency = cryptocurrencies.get(0);
 //        return cryptocurrency;
 //    }

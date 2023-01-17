@@ -25,7 +25,7 @@ public class ScheduledUpdate {
             for (Cryptocurrency cryptocurrencyServer : cryptocurrenciesServer) {
                 if (cryptocurrencyServer.getId().equals(cryptocurrencyBD.getId())) {
                     if (!(cryptocurrencyBD.getPrice_usd().equals(cryptocurrencyServer.getPrice_usd()))) {
-                        cryptoRepository.save(cryptocurrencyServer);
+                        cryptocurrencyBD.setPrice_usd(cryptocurrencyServer.getPrice_usd());
                     }
                 }
             }
