@@ -1,6 +1,8 @@
 package com.tolya.cryptocurrencies.client;
 
 import com.tolya.cryptocurrencies.models.Cryptocurrency;
+import com.tolya.cryptocurrencies.models.UserPrice_usd;
+import com.tolya.cryptocurrencies.repositories.CryptoRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -10,11 +12,16 @@ import java.util.List;
 
 @Component
 public class CoinloreClient {
-    public CoinloreClient(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
+
 
     private RestTemplate restTemplate;
+
+    public CoinloreClient(RestTemplate restTemplate, CryptoRepository cryptoRepository) {
+        this.restTemplate = restTemplate;
+        this.cryptoRepository = cryptoRepository;
+    }
+
+    private CryptoRepository cryptoRepository;
 
 //    public Cryptocurrency getCryptocurrency(String id) {
 //        List<Cryptocurrency> cryptocurrenciesServer = new ArrayList<>();
@@ -26,20 +33,21 @@ public class CoinloreClient {
 //        return cryptocurrency;
 //    }
 
-    public List<Cryptocurrency> getCryptocurrencies() {
+    public List<UserPrice_usd> getUserPrice_usd() {
         String[] cryptocurrenciesId = {"90", "80", "48543"};
-        List<Cryptocurrency> cryptocurrenciesServer = new ArrayList<>();
+        List<UserPrice_usd> userPrice_usdsServer = new ArrayList<>();
         for (String id : cryptocurrenciesId) {
             String url = "https://api.coinlore.net/api/ticker/?id=%s";
             url = String.format(url, id);
-            Cryptocurrency[] forObject = restTemplate.getForObject(url, Cryptocurrency[].class);
-            List<Cryptocurrency> cryptocurrencies = Arrays.asList(forObject);
-            for (Cryptocurrency cryptocurrency : cryptocurrencies) {
-                if (cryptocurrency.getId().equals(id)) {
-                    cryptocurrenciesServer.add(cryptocurrency);
-                }
+            UserPrice_usd[] forObject = restTemplate.getForObject(url, UserPrice_usd[].class);
+            List<UserPrice_usd> userPrice_usds = Arrays.asList(forObject);
+            for (UserPrice_usd userPrice:userPrice_usds
+                 ) {
+                userPrice.setCryptocurrency(cryptoRepository.findById(id).orElseGet(() -> new Cryptocurrency()));
+                UserPrice_usd userPrice_usd = userPrice;
+                userPrice_usdsServer.add(userPrice_usd);
             }
-        }
-        return cryptocurrenciesServer;
+            }
+        return userPrice_usdsServer;
     }
 }

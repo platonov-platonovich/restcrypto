@@ -1,8 +1,9 @@
 package com.tolya.cryptocurrencies.service;
 
 import com.tolya.cryptocurrencies.client.CoinloreClient;
-import com.tolya.cryptocurrencies.models.Cryptocurrency;
+import com.tolya.cryptocurrencies.models.UserPrice_usd;
 import com.tolya.cryptocurrencies.repositories.CryptoRepository;
+import com.tolya.cryptocurrencies.repositories.UserPriceRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,20 +15,17 @@ import java.util.List;
 @AllArgsConstructor
 public class ScheduledUpdate {
     private final CryptoRepository cryptoRepository;
+    private final UserPriceRepository userPriceRepository;
     private final CoinloreClient coinloreClient;
 
     @Async
     @Scheduled(fixedRate = 15000)
     public void update() {
-        List<Cryptocurrency> cryptocurrenciesBD = cryptoRepository.findAll();
-        List<Cryptocurrency> cryptocurrenciesServer = coinloreClient.getCryptocurrencies();
-        for (Cryptocurrency cryptocurrencyBD : cryptocurrenciesBD) {
-            for (Cryptocurrency cryptocurrencyServer : cryptocurrenciesServer) {
-                if (cryptocurrencyServer.getId().equals(cryptocurrencyBD.getId())) {
-                    if (!(cryptocurrencyBD.getPrice_usd().equals(cryptocurrencyServer.getPrice_usd()))) {
-                        cryptocurrencyBD.setPrice_usd(cryptocurrencyServer.getPrice_usd());
-                    }
-                }
+        List<UserPrice_usd> userPrice_usdsServer = coinloreClient.getUserPrice_usd();
+        List<UserPrice_usd> userPrice_usdsBD = userPriceRepository.findAll();
+        for (UserPrice_usd userPrice : userPrice_usdsServer) {
+            if (!userPrice_usdsBD.equals(userPrice_usdsServer)) {
+                userPriceRepository.save(userPrice);
             }
         }
     }

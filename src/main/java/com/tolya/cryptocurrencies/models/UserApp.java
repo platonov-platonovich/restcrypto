@@ -24,7 +24,16 @@ public class UserApp implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
-        @Override
+    public UserApp() {
+
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "price_id", referencedColumnName = "cryptocurrency_id")
+    private UserPrice_usd userPrice_usd;
+
+
+    @Override
     public boolean isAccountNonExpired() {
         return true;
     }
@@ -43,6 +52,7 @@ public class UserApp implements UserDetails {
     public boolean isEnabled() {
         return isActive();
     }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
