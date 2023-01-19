@@ -23,10 +23,22 @@ public class ScheduledUpdate {
     public void update() {
         List<UserPrice_usd> userPrice_usdsServer = coinloreClient.getUserPrice_usd();
         List<UserPrice_usd> userPrice_usdsBD = userPriceRepository.findAll();
-        for (UserPrice_usd userPrice : userPrice_usdsServer) {
-            if (!userPrice_usdsBD.equals(userPrice_usdsServer)) {
-                userPriceRepository.save(userPrice);
-            }
+        for (UserPrice_usd user : userPrice_usdsServer
+        ) {
+           UserPrice_usd userConvert = new UserPrice_usd(user.getPrice_usd(), user.getId());
+            System.out.println(userConvert);
+            userPriceRepository.save(userConvert);
+
         }
+
+
+//        if (!userPrice_usdsBD.equals(userPrice_usdsServer)) {
+//            for (UserPrice_usd userPrice_usd : userPrice_usdsServer
+//            ) {
+//                userPriceRepository.save(userPrice_usd);
+//            }
+
+//        }
     }
 }
+
