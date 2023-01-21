@@ -1,7 +1,9 @@
 package com.tolya.cryptocurrencies.service;
 
 import com.tolya.cryptocurrencies.client.CoinloreClient;
+import com.tolya.cryptocurrencies.dto.UserPrice_usdDto;
 import com.tolya.cryptocurrencies.models.UserPrice_usd;
+import com.tolya.cryptocurrencies.myException.NoEntityException;
 import com.tolya.cryptocurrencies.repositories.CryptoRepository;
 import com.tolya.cryptocurrencies.repositories.UserPriceRepository;
 import lombok.AllArgsConstructor;
@@ -14,28 +16,23 @@ import java.util.List;
 @Component
 @AllArgsConstructor
 public class ScheduledUpdate {
+    private  final  MappingUtils mappingUtils;
     private final CryptoRepository cryptoRepository;
     private final UserPriceRepository userPriceRepository;
     private final CoinloreClient coinloreClient;
 
     @Async
     @Scheduled(fixedRate = 15000)
-    public void update() {
-        List<UserPrice_usd> userPrice_usdsServer = coinloreClient.getUserPrice_usd();
-        List<UserPrice_usd> userPrice_usdsBD = userPriceRepository.findAll();
-        for (UserPrice_usd user : userPrice_usdsServer
-        ) {userPriceRepository.save(user);
+    public void update() throws NoEntityException {
+        List<UserPrice_usdDto> userPrice_usdsServer = coinloreClient.getUserPrice_usdDto();
 
+        for (UserPrice_usdDto priceDto : userPrice_usdsServer
+        ) {
+            UserPrice_usd userPrice_usdBD = userPriceRepository.findById(priceDto.getId()).orElseThrow(()-> new NoEntityException());
+            if(priceDto.getPrice_usd()!=userPrice_usdBD.getPrice_usd()) {
+                userPriceRepository.save(mappingUtils.mapToPrice_usdEntity(priceDto));
+            }
         }
-
-
-//        if (!userPrice_usdsBD.equals(userPrice_usdsServer)) {
-//            for (UserPrice_usd userPrice_usd : userPrice_usdsServer
-//            ) {
-//                userPriceRepository.save(userPrice_usd);
-//            }
-
-//        }
     }
 }
 

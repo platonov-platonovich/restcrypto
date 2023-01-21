@@ -1,8 +1,6 @@
 package com.tolya.cryptocurrencies.client;
 
 import com.tolya.cryptocurrencies.dto.UserPrice_usdDto;
-import com.tolya.cryptocurrencies.models.Cryptocurrency;
-import com.tolya.cryptocurrencies.models.UserPrice_usd;
 import com.tolya.cryptocurrencies.repositories.CryptoRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -24,31 +22,19 @@ public class CoinloreClient {
 
     private CryptoRepository cryptoRepository;
 
-//    public Cryptocurrency getCryptocurrency(String id) {
-//        List<Cryptocurrency> cryptocurrenciesServer = new ArrayList<>();
-//        String url = "https://api.coinlore.net/api/ticker/?id=%s";
-//        url = String.format(url, id);
-//        Cryptocurrency[] forObject = restTemplate.getForObject(url, Cryptocurrency[].class);
-//        List<Cryptocurrenc  y> cryptocurrencies = Arrays.asList(forObject);
-//        Cryptocurrency cryptocurrency = cryptocurrencies.get(0);
-//        return cryptocurrency;
-//    }
-
-    public List<UserPrice_usd> getUserPrice_usd() {
+    public List<UserPrice_usdDto> getUserPrice_usdDto() {
         String[] cryptocurrenciesId = {"90", "80", "48543"};
-        List<UserPrice_usd> userPrice_usdsServer = new ArrayList<>();
+        List<UserPrice_usdDto> userPrice_usdsServer = new ArrayList<>();
         for (String id : cryptocurrenciesId) {
             String url = "https://api.coinlore.net/api/ticker/?id=%s";
             url = String.format(url, id);
-            UserPrice_usd[] forObject = restTemplate.getForObject(url, UserPrice_usd[].class);
+            UserPrice_usdDto[] forObject = restTemplate.getForObject(url, UserPrice_usdDto[].class);
             List<UserPrice_usdDto> userPrice_usds = Arrays.asList(forObject);
-            for (UserPrice_usdDto userPriceDto:userPrice_usds
-                 ) {
-                userPriceDto.setCryptocurrency(cryptoRepository.findById(id).orElseGet(() -> new Cryptocurrency()));
-                UserPrice_usd userPrice_usd = userPrice;
-                userPrice_usdsServer.add(userPrice_usd);
+            for (UserPrice_usdDto userPriceDto : userPrice_usds
+            ) {
+                userPrice_usdsServer.add(userPriceDto);
             }
-            }
+        }
         return userPrice_usdsServer;
     }
 }
