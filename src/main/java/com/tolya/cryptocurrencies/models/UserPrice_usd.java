@@ -5,7 +5,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
@@ -34,7 +33,4 @@ public class UserPrice_usd implements Serializable {
     public void setCryptocurrency(Cryptocurrency cryptocurrency) {
         this.cryptocurrency = cryptocurrency;
     }
-    @OneToMany(mappedBy = "userPrice_usd")
-@JsonIgnoreProperties
-    private Set<UserApp> userApp;
 }

@@ -24,10 +24,7 @@ public class ScheduledUpdate {
         List<UserPrice_usd> userPrice_usdsServer = coinloreClient.getUserPrice_usd();
         List<UserPrice_usd> userPrice_usdsBD = userPriceRepository.findAll();
         for (UserPrice_usd user : userPrice_usdsServer
-        ) {
-           UserPrice_usd userConvert = new UserPrice_usd(user.getPrice_usd(), user.getId());
-            System.out.println(userConvert);
-            userPriceRepository.save(userConvert);
+        ) {userPriceRepository.save(user);
 
         }
 

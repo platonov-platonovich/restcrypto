@@ -1,5 +1,6 @@
 package com.tolya.cryptocurrencies.client;
 
+import com.tolya.cryptocurrencies.dto.UserPrice_usdDto;
 import com.tolya.cryptocurrencies.models.Cryptocurrency;
 import com.tolya.cryptocurrencies.models.UserPrice_usd;
 import com.tolya.cryptocurrencies.repositories.CryptoRepository;
@@ -40,10 +41,10 @@ public class CoinloreClient {
             String url = "https://api.coinlore.net/api/ticker/?id=%s";
             url = String.format(url, id);
             UserPrice_usd[] forObject = restTemplate.getForObject(url, UserPrice_usd[].class);
-            List<UserPrice_usd> userPrice_usds = Arrays.asList(forObject);
-            for (UserPrice_usd userPrice:userPrice_usds
+            List<UserPrice_usdDto> userPrice_usds = Arrays.asList(forObject);
+            for (UserPrice_usdDto userPriceDto:userPrice_usds
                  ) {
-                userPrice.setCryptocurrency(cryptoRepository.findById(id).orElseGet(() -> new Cryptocurrency()));
+                userPriceDto.setCryptocurrency(cryptoRepository.findById(id).orElseGet(() -> new Cryptocurrency()));
                 UserPrice_usd userPrice_usd = userPrice;
                 userPrice_usdsServer.add(userPrice_usd);
             }
