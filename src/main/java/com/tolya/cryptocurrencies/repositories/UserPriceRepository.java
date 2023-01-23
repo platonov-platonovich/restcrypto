@@ -1,18 +1,18 @@
 package com.tolya.cryptocurrencies.repositories;
 
-import com.tolya.cryptocurrencies.models.UserPrice_usd;
+import com.tolya.cryptocurrencies.models.UserCryptocurrency;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface UserPriceRepository extends CrudRepository <UserPrice_usd, String>{
+public interface UserPriceRepository extends CrudRepository <UserCryptocurrency, String>{
     @Override
-    UserPrice_usd save(UserPrice_usd entity);
+    UserCryptocurrency save(UserCryptocurrency entity);
 
     @Override
-    Optional<UserPrice_usd> findById(String s);
+    Optional<UserCryptocurrency> findById(String s);
 
     @Override
-    List<UserPrice_usd> findAll();
+    List<UserCryptocurrency> findAll();
 }

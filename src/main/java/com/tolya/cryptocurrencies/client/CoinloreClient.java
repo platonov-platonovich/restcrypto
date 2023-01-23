@@ -1,40 +1,53 @@
 package com.tolya.cryptocurrencies.client;
 
-import com.tolya.cryptocurrencies.dto.UserPrice_usdDto;
-import com.tolya.cryptocurrencies.repositories.CryptoRepository;
+import com.tolya.cryptocurrencies.dto.CoinloreTicker;
+import com.tolya.cryptocurrencies.repositories.CryptoRepository;import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Optional;
 
+@AllArgsConstructor
 @Component
-public class CoinloreClient {
 
+public class CoinloreClient implements CryptocurrencyClient {
+    @Value("${url.client:https://api.coinlore.net/api/ticker/?id=%s}")
+    private String url;
 
     private RestTemplate restTemplate;
+    private CryptoRepository cryptoRepository;
 
     public CoinloreClient(RestTemplate restTemplate, CryptoRepository cryptoRepository) {
         this.restTemplate = restTemplate;
         this.cryptoRepository = cryptoRepository;
     }
 
-    private CryptoRepository cryptoRepository;
+    public CoinloreClient() {
+    }
 
-    public List<UserPrice_usdDto> getUserPrice_usdDto() {
-        String[] cryptocurrenciesId = {"90", "80", "48543"};
-        List<UserPrice_usdDto> userPrice_usdsServer = new ArrayList<>();
-        for (String id : cryptocurrenciesId) {
-            String url = "https://api.coinlore.net/api/ticker/?id=%s";
-            url = String.format(url, id);
-            UserPrice_usdDto[] forObject = restTemplate.getForObject(url, UserPrice_usdDto[].class);
-            List<UserPrice_usdDto> userPrice_usds = Arrays.asList(forObject);
-            for (UserPrice_usdDto userPriceDto : userPrice_usds
-            ) {
-                userPrice_usdsServer.add(userPriceDto);
+    @Override
+    public CoinloreTicker getCoinloreTicker(String id) {
+        System.out.println(url);
+        //externalise url to application properties(@value)
+        url = String.format(url, id);
+        CoinloreTicker[] forObject = restTemplate.getForObject(url, CoinloreTicker[].class);
+        for (CoinloreTicker userPriceDto : forObject) {
+            if (userPriceDto.getId().equals(id)) {
+                return userPriceDto;
             }
         }
-        return userPrice_usdsServer;
+        return null;
+    }
+
+    public Optional<CoinloreTicker> getCoinloreTickerOp(String id) {
+        //externalise url to application properties(@value)
+        url = String.format(url, id);
+        CoinloreTicker[] forObject = restTemplate.getForObject(url, CoinloreTicker[].class);
+
+        return Arrays.stream(forObject)
+                .filter(el->el.getId().equals(id))
+                .findFirst();
     }
 }
