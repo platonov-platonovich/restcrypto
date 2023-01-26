@@ -13,8 +13,8 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "CryptocurrencyUser")
-public class User implements UserDetails {
+@Table(name = "userApp")
+public class UserApp implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

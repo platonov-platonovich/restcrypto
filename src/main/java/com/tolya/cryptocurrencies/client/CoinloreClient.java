@@ -13,9 +13,8 @@ import java.util.Optional;
 @Component
 
 public class CoinloreClient implements CryptocurrencyClient {
-    @Value("${url.client:https://api.coinlore.net/api/ticker/?id=%s}")
+    @Value("${url.client}")
     private String url;
-
     private RestTemplate restTemplate;
     private CryptoRepository cryptoRepository;
 
@@ -29,7 +28,6 @@ public class CoinloreClient implements CryptocurrencyClient {
 
     @Override
     public CoinloreTicker getCoinloreTicker(String id) {
-        System.out.println(url);
         //externalise url to application properties(@value)
         url = String.format(url, id);
         CoinloreTicker[] forObject = restTemplate.getForObject(url, CoinloreTicker[].class);

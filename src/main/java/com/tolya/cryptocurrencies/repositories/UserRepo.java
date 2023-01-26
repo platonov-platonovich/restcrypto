@@ -1,11 +1,13 @@
 package com.tolya.cryptocurrencies.repositories;
 
 
-import com.tolya.cryptocurrencies.models.User;
+import com.tolya.cryptocurrencies.models.UserApp;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepo extends JpaRepository<User, Integer> {
-    User findByUsername(String username);
+import java.util.Optional;
 
-    User findById(int id);
+public interface UserRepo extends JpaRepository<UserApp, Integer> {
+    Optional <UserApp> findByUsername(String username);
+
+    UserApp findById(int id);
 }
