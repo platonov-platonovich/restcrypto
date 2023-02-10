@@ -1,7 +1,7 @@
 package com.tolya.cryptocurrencies.client;
 
 import com.tolya.cryptocurrencies.dto.CoinloreTicker;
-import com.tolya.cryptocurrencies.repositories.CryptoRepository;import lombok.AllArgsConstructor;
+import com.tolya.cryptocurrencies.repositories.CryptocurrencyRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -9,43 +9,30 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Arrays;
 import java.util.Optional;
 
-@AllArgsConstructor
-@Component
 
+@Component
 public class CoinloreClient implements CryptocurrencyClient {
+
     @Value("${url.client}")
     private String url;
-    private RestTemplate restTemplate;
-    private CryptoRepository cryptoRepository;
 
-    public CoinloreClient(RestTemplate restTemplate, CryptoRepository cryptoRepository) {
+    public CoinloreClient(RestTemplate restTemplate, CryptocurrencyRepository cryptocurrencyRepository) {
         this.restTemplate = restTemplate;
-        this.cryptoRepository = cryptoRepository;
+        this.cryptocurrencyRepository = cryptocurrencyRepository;
     }
 
-    public CoinloreClient() {
-    }
+    private RestTemplate restTemplate;
+    private CryptocurrencyRepository cryptocurrencyRepository;
 
     @Override
-    public CoinloreTicker getCoinloreTicker(String id) {
+    public Optional<CoinloreTicker> getCoinloreTickerById(String id) {
         //externalise url to application properties(@value)
-        url = String.format(url, id);
-        CoinloreTicker[] forObject = restTemplate.getForObject(url, CoinloreTicker[].class);
-        for (CoinloreTicker userPriceDto : forObject) {
-            if (userPriceDto.getId().equals(id)) {
-                return userPriceDto;
-            }
-        }
-        return null;
-    }
+        String getByIdUrl = String.format(url, id);
+        CoinloreTicker[] forObject = restTemplate.getForObject(getByIdUrl, CoinloreTicker[].class);
+        return Optional.ofNullable(forObject)
+                .flatMap(tickers -> Arrays.stream(tickers)
+                        .filter(el -> el.getId().equals(id))
+                        .findFirst());
 
-    public Optional<CoinloreTicker> getCoinloreTickerOp(String id) {
-        //externalise url to application properties(@value)
-        url = String.format(url, id);
-        CoinloreTicker[] forObject = restTemplate.getForObject(url, CoinloreTicker[].class);
-
-        return Arrays.stream(forObject)
-                .filter(el->el.getId().equals(id))
-                .findFirst();
     }
 }

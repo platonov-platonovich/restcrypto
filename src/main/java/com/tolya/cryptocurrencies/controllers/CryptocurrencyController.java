@@ -1,12 +1,9 @@
 package com.tolya.cryptocurrencies.controllers;
 
 import com.tolya.cryptocurrencies.models.Cryptocurrency;
-import com.tolya.cryptocurrencies.repositories.CryptoRepository;
+import com.tolya.cryptocurrencies.repositories.CryptocurrencyRepository;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,27 +15,30 @@ public class CryptocurrencyController {
     @Value("${url.client}")
     private String url;
 
-    private CryptoRepository cryptoRepository;
+    private CryptocurrencyRepository cryptocurrencyRepository;
 
-    public CryptocurrencyController(CryptoRepository cryptoRepository) {
-        this.cryptoRepository = cryptoRepository;
+    public CryptocurrencyController(CryptocurrencyRepository cryptocurrencyRepository) {
+        this.cryptocurrencyRepository = cryptocurrencyRepository;
     }
 
 
     @GetMapping
     public List<Cryptocurrency> getAll() {
-        return cryptoRepository.findAll();
+        return cryptocurrencyRepository.findAll();
     }
 
     @GetMapping("/{id}")
     public Optional<Cryptocurrency> getById(@PathVariable("id") String id) {
-        return cryptoRepository.findById(id);
+        return cryptocurrencyRepository.findById(id);
     }
     @GetMapping("/get")
-    public String get(){
-        return url;
+    public Optional<Cryptocurrency> get(){
+        return cryptocurrencyRepository.findById("90");
     }
+
+    @PostMapping("/notify")
 }
+//userCryptocurency(notify) post new object userCryptorrency
 
 
 

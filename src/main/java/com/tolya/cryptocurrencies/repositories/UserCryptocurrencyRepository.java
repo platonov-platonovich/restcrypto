@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserPriceRepository extends CrudRepository <UserCryptocurrency, String>{
+public interface UserCryptocurrencyRepository extends CrudRepository <UserCryptocurrency, String>{
     @Override
     UserCryptocurrency save(UserCryptocurrency entity);
 

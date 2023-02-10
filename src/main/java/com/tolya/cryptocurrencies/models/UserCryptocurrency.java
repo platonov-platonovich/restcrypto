@@ -14,7 +14,7 @@ public class UserCryptocurrency {
     @Id
     private String id;
 
-    private String cryptocurrencyPrice;
+    private String  cryptocurrencyPrice;
 
     @OneToOne(cascade = CascadeType.ALL)
     @MapsId
