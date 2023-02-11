@@ -25,9 +25,7 @@ public class UserApp implements UserDetails {
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
-    @ManyToOne
-    @JoinColumn(name = "userCryptocurrencyId", referencedColumnName = "id")
-    private UserCryptocurrency userCryptocurrency;
+
 
 
     @Override

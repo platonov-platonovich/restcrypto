@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,7 +19,10 @@ public class UserCryptocurrency {
 
     @OneToOne(cascade = CascadeType.ALL)
     @MapsId
-    @JoinColumn(name = "id")
+    @JoinColumn
     private Cryptocurrency cryptocurrency;
+    @OneToMany
+    @JoinColumn(referencedColumnName = "userName")
+    private List<UserApp> userApp;
 }
 

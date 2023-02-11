@@ -17,4 +17,6 @@ List<Cryptocurrency> findAll();
 
  @Override
  Cryptocurrency save(Cryptocurrency entity);
+
+ Optional<Cryptocurrency> findBySymbol(String symbol);
 }
