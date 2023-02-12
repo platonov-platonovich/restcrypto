@@ -2,10 +2,11 @@ package com.tolya.cryptocurrencies.models;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.List;
 
+@ToString
 @Getter
 @Setter
 @Entity
@@ -14,15 +15,14 @@ public class UserCryptocurrency {
 
     @Id
     private String id;
-
-    private String  cryptocurrencyPrice;
+    private String cryptocurrencyPrice;
 
     @OneToOne(cascade = CascadeType.ALL)
     @MapsId
     @JoinColumn
     private Cryptocurrency cryptocurrency;
-    @OneToMany
-    @JoinColumn(referencedColumnName = "userName")
-    private List<UserApp> userApp;
+    @OneToOne
+    @JoinColumn(name = "userApp_id")
+    private UserApp userApp;
 }
 

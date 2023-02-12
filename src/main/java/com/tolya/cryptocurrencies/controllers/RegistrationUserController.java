@@ -2,7 +2,6 @@ package com.tolya.cryptocurrencies.controllers;
 
 
 import com.tolya.cryptocurrencies.dto.RegisterUserRequest;
-import com.tolya.cryptocurrencies.models.Role;
 import com.tolya.cryptocurrencies.models.UserApp;
 import com.tolya.cryptocurrencies.repositories.UserRepository;
 import lombok.AllArgsConstructor;
@@ -12,8 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import java.util.Collections;
 @AllArgsConstructor
 @Controller
 @Log4j2
@@ -32,7 +29,6 @@ public class RegistrationUserController {
         userApp.setUsername(registerUserRequest.getUserName());
         userApp.setPassword(registerUserRequest.getPassword());
         userApp.setActive(true);
-        userApp.setRoles(Collections.singleton(Role.USER));
         userRepository.save(userApp);
         return ResponseEntity.ok("ok");
     }
