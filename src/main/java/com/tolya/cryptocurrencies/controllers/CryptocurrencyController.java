@@ -70,8 +70,9 @@ public class CryptocurrencyController {
                             }
                         });
         System.out.println(userCryptocurrency);
+        userCryptocurrencyRepository.save(userCryptocurrency);
         return new ResponseEntity <>(HttpStatus.ACCEPTED);
-//        userCryptocurrencyRepository.save(userCryptocurrency);
+
     }
 }
 
