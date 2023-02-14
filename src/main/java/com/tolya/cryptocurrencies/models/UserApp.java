@@ -13,12 +13,8 @@ import javax.persistence.*;
 public class UserApp  {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
+    private Long id;
     private String username;
     private String password;
     private boolean active;
-    @OneToOne
-    @JoinColumn(name = "user_cryptocurrency_id", insertable = false, updatable = false)
-    private UserCryptocurrency userCryptocurrency;
-
 }

@@ -8,7 +8,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class CryptocurrencyUserRequest {
-    private String username;
+    private String userName;
     private String symbol;
     private String password;
+    private CryptocurrencyUserRequest get(){
+        return this;
+    }
 }

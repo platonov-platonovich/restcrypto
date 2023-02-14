@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 @AllArgsConstructor
 @Controller
 @Log4j2
@@ -23,15 +25,20 @@ public class RegistrationUserController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity <String> register(RegisterUserRequest registerUserRequest){
+    public ResponseEntity<String> register(@RequestBody RegisterUserRequest registerUserRequest) {
         // check if user exists -> return 400 HTTP if user exists already
-        UserApp userApp = new UserApp();
-        userApp.setUsername(registerUserRequest.getUserName());
-        userApp.setPassword(registerUserRequest.getPassword());
-        userApp.setActive(true);
-        userRepository.save(userApp);
-        return ResponseEntity.ok("ok");
+        if (!userRepository.findByUsername(registerUserRequest.getUserName()).isPresent()) {
+            UserApp userApp = new UserApp();
+            userApp.setUsername(registerUserRequest.getUserName());
+            userApp.setPassword(registerUserRequest.getPassword());
+            userApp.setActive(true);
+            userRepository.save(userApp);
+            return ResponseEntity.ok("ok");
+        } else {
+            return ResponseEntity.ok("user exist");
+        }
     }
+
     @PostMapping("/login")
     public String login(UserApp userApp, Model model) {
 

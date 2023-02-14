@@ -1,7 +1,6 @@
 package com.tolya.cryptocurrencies.service;
 
 import com.tolya.cryptocurrencies.client.CoinloreClient;
-import com.tolya.cryptocurrencies.myException.NoEntityException;
 import com.tolya.cryptocurrencies.repositories.CryptocurrencyRepository;
 import com.tolya.cryptocurrencies.repositories.UserCryptocurrencyRepository;
 import lombok.AllArgsConstructor;
@@ -9,8 +8,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 @AllArgsConstructor
@@ -22,11 +21,22 @@ public class ScheduledUpdate {
 
     @Async
     @Scheduled(fixedRate = 15000)
-    public void update() throws NoEntityException {
-        List<String> idCryptocurrencies = new ArrayList<>();
+    public void update()  {
+        Set<String> idCryptocurrencies = new HashSet<>();
         userCryptocurrencyRepository.findAll().forEach(n -> idCryptocurrencies.add(n.getId()));
         System.out.println(idCryptocurrencies);
+        for (String s:idCryptocurrencies
+             ) {
+            if (!userCryptocurrencyRepository.findById(s).get().getCryptocurrencyPrice().equals(coinloreClient.getCoinloreTickerById(s).get().getPrice_usd())){
+                userCryptocurrencyRepository.save(mappingUtils.mapToPrice_usdEntity(coinloreClient.getCoinloreTickerById(s).get()));
+
+            }
+
+        }
     }
+
+
+
 //        for ()
 //        CoinloreTicker userPrice_usdServer = coinloreClient.getCoinloreTickerById();
 //        System.out.println(userPrice_usdServer);

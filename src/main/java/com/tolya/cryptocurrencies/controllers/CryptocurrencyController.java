@@ -37,10 +37,6 @@ public class CryptocurrencyController {
         return cryptocurrencyRepository.findById(id);
     }
 
-    @GetMapping("/get")
-    public Optional<Cryptocurrency> get() {
-        return cryptocurrencyRepository.findById("90");
-    }
 
     @PostMapping("/notify")
     public ResponseEntity<?> notify(@RequestBody CryptocurrencyUserRequest cryptocurrencyUserRequest) {
@@ -52,26 +48,25 @@ public class CryptocurrencyController {
         userCryptocurrency.setId(userCryptocurrency.getCryptocurrency().getId());
         cryptocurrencyRepository
                 .findBySymbol(cryptocurrencyUserRequest.getSymbol())
-                        .ifPresent(n->userCryptocurrency.setCryptocurrencyPrice(coinloreClient.getCoinloreTickerById(userCryptocurrency.getId()).get().getPrice_usd()));
+                .ifPresent(n -> userCryptocurrency.setCryptocurrencyPrice(coinloreClient.getCoinloreTickerById(userCryptocurrency.getId()).get().getPrice_usd()));
         Optional<UserApp> appUserOptional = userRepository
-                .findByUsername(cryptocurrencyUserRequest.getUsername());
-        if (!appUserOptional.isPresent()){
+                .findByUsername(cryptocurrencyUserRequest.getUserName());
+        if (!appUserOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
 
-
         userRepository
-                .findByUsername(cryptocurrencyUserRequest.getUsername())
-                .ifPresent(m-> {
-                            if (cryptocurrencyUserRequest.getPassword().equals(m.getPassword())) {
-                                userCryptocurrency.setUserApp(userRepository
-                                        .findByUsername(cryptocurrencyUserRequest.getUsername()).get());
-                            }
-                        });
-        System.out.println(userCryptocurrency);
+                .findByUsername(cryptocurrencyUserRequest.getUserName())
+                .ifPresent(m -> {
+                    if (cryptocurrencyUserRequest.getPassword().equals(m.getPassword())) {
+                        userCryptocurrency.setUserApp(userRepository
+                                .findByUsername(cryptocurrencyUserRequest.getUserName()).get());
+                    }
+                });
+        System.out.println(userCryptocurrency + "nu");
         userCryptocurrencyRepository.save(userCryptocurrency);
-        return new ResponseEntity <>(HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
 
     }
 }
