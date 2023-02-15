@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "userApp")
+@Table
 public class UserApp  {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,4 +17,5 @@ public class UserApp  {
     private String username;
     private String password;
     private boolean active;
+
 }

@@ -1,56 +1,61 @@
 package com.tolya.cryptocurrencies.service;
 
 import com.tolya.cryptocurrencies.client.CoinloreClient;
-import com.tolya.cryptocurrencies.repositories.CryptocurrencyRepository;
+import com.tolya.cryptocurrencies.models.UserCryptocurrency;
 import com.tolya.cryptocurrencies.repositories.UserCryptocurrencyRepository;
+import com.tolya.cryptocurrencies.repositories.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+@Log4j2
 @Component
 @AllArgsConstructor
 public class ScheduledUpdate {
-    private final MappingUtils mappingUtils;
-    private final CryptocurrencyRepository cryptocurrencyRepository;
     private final UserCryptocurrencyRepository userCryptocurrencyRepository;
     private final CoinloreClient coinloreClient;
+    private final UserRepository userRepository;
 
     @Async
     @Scheduled(fixedRate = 15000)
-    public void update()  {
+    void update() {
         Set<String> idCryptocurrencies = new HashSet<>();
-        userCryptocurrencyRepository.findAll().forEach(n -> idCryptocurrencies.add(n.getId()));
-        System.out.println(idCryptocurrencies);
-        for (String s:idCryptocurrencies
-             ) {
-            if (!userCryptocurrencyRepository.findById(s).get().getCryptocurrencyPrice().equals(coinloreClient.getCoinloreTickerById(s).get().getPrice_usd())){
-                userCryptocurrencyRepository.save(mappingUtils.mapToPrice_usdEntity(coinloreClient.getCoinloreTickerById(s).get()));
+        List<UserCryptocurrency> userCryptocurrencies = userCryptocurrencyRepository
+                .findAll();
+        userCryptocurrencies.forEach(n -> idCryptocurrencies.add(n.getId()));
 
+        for (String id : idCryptocurrencies
+        ) {
+            UserCryptocurrency userCryptocurrency = userCryptocurrencyRepository
+                    .findById(id)
+                    .orElseThrow();
+            double priceBD = Double.parseDouble(userCryptocurrency
+                    .getCryptocurrencyPrice());
+            double priceCoinlore = Double.parseDouble(coinloreClient
+                    .getCoinloreTickerById(id)
+                    .orElseThrow()
+                    .getPrice_usd());
+            if (priceBD != priceCoinlore) {
+                userCryptocurrencyRepository
+                        .save(MappingUtils.mapToPriceUsdEntity(
+                                coinloreClient
+                                        .getCoinloreTickerById(id)
+                                        .orElseThrow()));
+
+//                if(Math.abs(priceBD-priceCoinlore)>priceBD/10){
+//                    log.warn(""+100*Math.abs(priceBD-priceCoinlore)/priceBD+userRepository.g);
+//                }
             }
-
         }
     }
-
-
-
-//        for ()
-//        CoinloreTicker userPrice_usdServer = coinloreClient.getCoinloreTickerById();
-//        System.out.println(userPrice_usdServer);
-//
-//        for (CoinloreTicker priceDto : userPrice_usdServer
-//        ) {
-//            UserCryptocurrency userPrice_usdBD = userCryptocurrencyRepository.findById(priceDto.getId()).orElseThrow(()-> new NoEntityException());
-//            if(priceDto.getPrice_usd()!=userPrice_usdBD.getCryptocurrencyPrice()) {
-//                userCryptocurrencyRepository.save(mappingUtils.mapToPrice_usdEntity(priceDto));
-//            }
-//            userPrice_usdServer.stream()
-//                    .filter(x-> !(x.getPrice_usd().equals(userCryptocurrencyRepository.findById(x.getId()))))
-//                    .forEach(n->userCryptocurrencyRepository.save((mappingUtils.mapToPrice_usdEntity(n))));
-//        }
 }
+
+
 
 

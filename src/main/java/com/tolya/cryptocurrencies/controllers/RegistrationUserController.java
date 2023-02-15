@@ -5,7 +5,6 @@ import com.tolya.cryptocurrencies.dto.RegisterUserRequest;
 import com.tolya.cryptocurrencies.models.UserApp;
 import com.tolya.cryptocurrencies.repositories.UserRepository;
 import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @AllArgsConstructor
 @Controller
-@Log4j2
 public class RegistrationUserController {
     private UserRepository userRepository;
 
@@ -42,7 +40,6 @@ public class RegistrationUserController {
     @PostMapping("/login")
     public String login(UserApp userApp, Model model) {
 
-        log.info("");
         userRepository.findByUsername(userApp.getUsername());
         return "redirect:/login";
     }

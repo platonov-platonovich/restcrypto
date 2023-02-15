@@ -41,30 +41,40 @@ public class CryptocurrencyController {
     @PostMapping("/notify")
     public ResponseEntity<?> notify(@RequestBody CryptocurrencyUserRequest cryptocurrencyUserRequest) {
         UserCryptocurrency userCryptocurrency = new UserCryptocurrency();
-        cryptocurrencyRepository
-                .findBySymbol(cryptocurrencyUserRequest.getSymbol())
-                // read about method reference
-                .ifPresent(userCryptocurrency::setCryptocurrency);
-        userCryptocurrency.setId(userCryptocurrency.getCryptocurrency().getId());
-        cryptocurrencyRepository
-                .findBySymbol(cryptocurrencyUserRequest.getSymbol())
-                .ifPresent(n -> userCryptocurrency.setCryptocurrencyPrice(coinloreClient.getCoinloreTickerById(userCryptocurrency.getId()).get().getPrice_usd()));
+        Optional<Cryptocurrency> cryptocurrencyOptional = cryptocurrencyRepository
+                        .findBySymbol(cryptocurrencyUserRequest.getSymbol());
+
+        userCryptocurrency
+                .setCryptocurrency(
+                        cryptocurrencyOptional
+                                .orElseThrow());
+        userCryptocurrency
+                .setId(
+                        userCryptocurrency
+                                .getCryptocurrency()
+                                .getId());
+
         Optional<UserApp> appUserOptional = userRepository
                 .findByUsername(cryptocurrencyUserRequest.getUserName());
+        appUserOptional.ifPresent(n -> {
+            userCryptocurrency
+                    .setCryptocurrencyPrice(
+                            coinloreClient
+                                    .getCoinloreTickerById(userCryptocurrency.getId())
+                                    .orElseThrow()
+                                    .getPrice_usd());
+
+            if (
+            cryptocurrencyUserRequest
+                    .getPassword()
+                    .equals(n.getPassword())) {
+                userCryptocurrency
+                        .setUserApp(n);
+            }
+        });
         if (!appUserOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-
-
-        userRepository
-                .findByUsername(cryptocurrencyUserRequest.getUserName())
-                .ifPresent(m -> {
-                    if (cryptocurrencyUserRequest.getPassword().equals(m.getPassword())) {
-                        userCryptocurrency.setUserApp(userRepository
-                                .findByUsername(cryptocurrencyUserRequest.getUserName()).get());
-                    }
-                });
-        System.out.println(userCryptocurrency + "nu");
         userCryptocurrencyRepository.save(userCryptocurrency);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
 
@@ -73,5 +83,6 @@ public class CryptocurrencyController {
 
 //userCryptocurrency(notify) post new object userCryptocurrency
 
+// read about method reference
 
 

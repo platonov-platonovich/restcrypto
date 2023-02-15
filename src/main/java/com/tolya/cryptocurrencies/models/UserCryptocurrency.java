@@ -14,15 +14,15 @@ import javax.persistence.*;
 public class UserCryptocurrency {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
     private String cryptocurrencyPrice;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @MapsId
     @JoinColumn
     private Cryptocurrency cryptocurrency;
     @OneToOne
-    @JoinColumn(name = "userApp_id")
+    @JoinColumn(name = "userId")
     private UserApp userApp;
 }
 

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MappingUtils {
-    public UserCryptocurrency mapToPrice_usdEntity(CoinloreTicker dto){
+    public static UserCryptocurrency mapToPriceUsdEntity(CoinloreTicker dto){
       UserCryptocurrency entity = new UserCryptocurrency();
       entity.setCryptocurrencyPrice(dto.getPrice_usd());
       entity.setId(dto.getId());
