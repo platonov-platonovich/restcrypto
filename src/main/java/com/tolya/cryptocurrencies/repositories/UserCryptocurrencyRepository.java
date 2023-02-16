@@ -15,4 +15,5 @@ public interface UserCryptocurrencyRepository extends JpaRepository<UserCryptocu
 
     @Override
     List<UserCryptocurrency> findAll();
+    List<UserCryptocurrency> findAllByCryptocurrency_Id(String id);
 }

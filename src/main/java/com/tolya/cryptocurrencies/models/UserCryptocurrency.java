@@ -15,7 +15,7 @@ public class UserCryptocurrency {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
+    private Long id;
     private String cryptocurrencyPrice;
 
     @OneToOne(cascade = CascadeType.ALL)

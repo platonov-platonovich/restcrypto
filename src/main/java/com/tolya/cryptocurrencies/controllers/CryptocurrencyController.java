@@ -28,8 +28,8 @@ public class CryptocurrencyController {
     private CoinloreClient coinloreClient;
 
     @GetMapping
-    public List<Cryptocurrency> getAll() {
-        return cryptocurrencyRepository.findAll();
+    public List<UserCryptocurrency> getAll() {
+        return userCryptocurrencyRepository.findAllByCryptocurrency_Id("80");
     }
 
     @GetMapping("/{id}")
@@ -42,17 +42,12 @@ public class CryptocurrencyController {
     public ResponseEntity<?> notify(@RequestBody CryptocurrencyUserRequest cryptocurrencyUserRequest) {
         UserCryptocurrency userCryptocurrency = new UserCryptocurrency();
         Optional<Cryptocurrency> cryptocurrencyOptional = cryptocurrencyRepository
-                        .findBySymbol(cryptocurrencyUserRequest.getSymbol());
+                .findBySymbol(cryptocurrencyUserRequest.getSymbol());
 
         userCryptocurrency
                 .setCryptocurrency(
                         cryptocurrencyOptional
                                 .orElseThrow());
-        userCryptocurrency
-                .setId(
-                        userCryptocurrency
-                                .getCryptocurrency()
-                                .getId());
 
         Optional<UserApp> appUserOptional = userRepository
                 .findByUsername(cryptocurrencyUserRequest.getUserName());
@@ -60,14 +55,14 @@ public class CryptocurrencyController {
             userCryptocurrency
                     .setCryptocurrencyPrice(
                             coinloreClient
-                                    .getCoinloreTickerById(userCryptocurrency.getId())
+                                    .getCoinloreTickerById(userCryptocurrency.getCryptocurrency().getId())
                                     .orElseThrow()
                                     .getPrice_usd());
 
             if (
-            cryptocurrencyUserRequest
-                    .getPassword()
-                    .equals(n.getPassword())) {
+                    cryptocurrencyUserRequest
+                            .getPassword()
+                            .equals(n.getPassword())) {
                 userCryptocurrency
                         .setUserApp(n);
             }
