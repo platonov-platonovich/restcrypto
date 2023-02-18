@@ -21,7 +21,6 @@ import java.util.Optional;
 @RequestMapping("/cryptocurrency")
 public class CryptocurrencyController {
 
-
     private UserCryptocurrencyRepository userCryptocurrencyRepository;
     private CryptocurrencyRepository cryptocurrencyRepository;
     private UserRepository userRepository;
@@ -37,42 +36,39 @@ public class CryptocurrencyController {
         return cryptocurrencyRepository.findById(id);
     }
 
-
     @PostMapping("/notify")
     public ResponseEntity<?> notify(@RequestBody CryptocurrencyUserRequest cryptocurrencyUserRequest) {
         UserCryptocurrency userCryptocurrency = new UserCryptocurrency();
+
         Optional<Cryptocurrency> cryptocurrencyOptional = cryptocurrencyRepository
                 .findBySymbol(cryptocurrencyUserRequest.getSymbol());
+        if (cryptocurrencyOptional.isPresent()) {
 
-        userCryptocurrency
-                .setCryptocurrency(
-                        cryptocurrencyOptional
-                                .orElseThrow());
+            userCryptocurrency.setCryptocurrency(cryptocurrencyOptional.get());
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
         Optional<UserApp> appUserOptional = userRepository
                 .findByUsername(cryptocurrencyUserRequest.getUserName());
-        appUserOptional.ifPresent(n -> {
+        if (appUserOptional.isPresent()) {
             userCryptocurrency
                     .setCryptocurrencyPrice(
                             coinloreClient
                                     .getCoinloreTickerById(userCryptocurrency.getCryptocurrency().getId())
                                     .orElseThrow()
-                                    .getPrice_usd());
+                                    .getPriceUsd());
 
-            if (
-                    cryptocurrencyUserRequest
-                            .getPassword()
-                            .equals(n.getPassword())) {
-                userCryptocurrency
-                        .setUserApp(n);
+            if (appUserOptional.get().getPassword().equals(cryptocurrencyUserRequest.getPassword())) {
+                userCryptocurrency.setUserApp(appUserOptional.get());
+            } else {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
-        });
-        if (!appUserOptional.isPresent()) {
+        } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         userCryptocurrencyRepository.save(userCryptocurrency);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
-
     }
 }
 

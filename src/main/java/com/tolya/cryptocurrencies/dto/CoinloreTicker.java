@@ -1,9 +1,11 @@
 package com.tolya.cryptocurrencies.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
 public class CoinloreTicker {
    private String id;
-   private String price_usd;
+   @JsonProperty("price_usd")
+   private String priceUsd;
 }
