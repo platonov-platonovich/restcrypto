@@ -10,12 +10,21 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table
-public class UserApp  {
+public class UserApp {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    public UserApp(String username, String password, boolean active) {
+        this.username = username;
+        this.password = password;
+        this.active = active;
+    }
+
+    public UserApp() {
+    }
+
     private String username;
     private String password;
     private boolean active;
-
 }

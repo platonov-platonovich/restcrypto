@@ -29,4 +29,4 @@ public class CoinloreClient implements CryptocurrencyClient {
 
     }
 }
-junit 5, mockito
+//junit 5, mockito
